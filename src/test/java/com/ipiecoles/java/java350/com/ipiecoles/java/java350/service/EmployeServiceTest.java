@@ -46,7 +46,7 @@ class EmployeServiceTest {
 
         ArgumentCaptor<Employe> employeArgumentCaptor = ArgumentCaptor.forClass(Employe.class);
         Mockito.verify(employeRepository, Mockito.times(1)).save((employeArgumentCaptor).capture());
-        Employe e = employeArgumentCaptor.capture();
+        Employe e = employeArgumentCaptor.getValue();
 
         //Then
         //Si employé existe dans la base avec les bonnes infos
@@ -112,7 +112,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testEmbaucheEmployeManagerMiTempsMasterExistingEmploye() {
+    public void testEmbaucheEmploye() {
         //Given
         String nom ="Doe";
         String prenom = "John";
@@ -125,6 +125,7 @@ class EmployeServiceTest {
         //When/Then
        /* EntityExistsException e = Assertions.assertThrows(EntityExistsException.class, () ->employeService.embaucheEmploye(nom,prenom,poste,niveauEtude,tempsPartiel));
         Assertions.assertEquals("L'employé de matricule M00001 existe déjà en BDD", e.getMessage()); */
+
 
         EntityExistsException e = Assertions.assertThrows(EntityExistsException.class, () -> employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel));
         Assertions.assertEquals("L'employé de matricule M00001 existe déjà en BDD", e.getMessage());

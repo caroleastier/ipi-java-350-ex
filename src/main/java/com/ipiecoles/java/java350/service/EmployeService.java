@@ -46,7 +46,7 @@ public class EmployeService {
 
         //... et incrémentation
         Integer numeroMatricule = Integer.parseInt(lastMatricule) + 1;
-        if(numeroMatricule >= 80000){
+        if(numeroMatricule >= 80000 && numeroMatricule < 100000) {
             LOG.info("Embauche d'un employé {} {} {} {} {}", nom, prenom, poste, niveauEtude, tempsPartiel);
         }
         else if(numeroMatricule >= 100000){

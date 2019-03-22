@@ -53,14 +53,14 @@ public class EmployeServiceIntergrationTest {
         //Then
         Employe employe = employeRepository.findByMatricule("C12345");
 
-        Assertions.assertNull(employe);
+        Assertions.assertNotNull(employe);
         Assertions.assertEquals(nom, employe.getNom());
         Assertions.assertEquals(prenom, employe.getPrenom());
         Assertions.assertEquals(LocalDate.now(), employe.getDateEmbauche());
         Assertions.assertEquals("C12345", employe.getMatricule());
         Assertions.assertEquals(tempsPartiel, employe.getTempsPartiel());
 
-        Assertions.assertEquals(1825.46, employe.getSalaire().doubleValue());
+        Assertions.assertEquals(1521.22, employe.getSalaire().doubleValue());
     }
 
 }
