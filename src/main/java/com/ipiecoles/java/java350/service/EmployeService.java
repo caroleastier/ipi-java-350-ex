@@ -6,6 +6,8 @@ import com.ipiecoles.java.java350.model.Entreprise;
 import com.ipiecoles.java.java350.model.NiveauEtude;
 import com.ipiecoles.java.java350.model.Poste;
 import com.ipiecoles.java.java350.repository.EmployeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 
 @Service
 public class EmployeService {
+    private static final Logger LOG = LoggerFactory.getLogger(EmployeService.class);
 
     @Autowired
     private EmployeRepository employeRepository;
@@ -40,9 +43,14 @@ public class EmployeService {
         if(lastMatricule == null){
             lastMatricule = Entreprise.MATRICULE_INITIAL;
         }
+
         //... et incrémentation
         Integer numeroMatricule = Integer.parseInt(lastMatricule) + 1;
-        if(numeroMatricule >= 100000){
+        if(numeroMatricule >= 80000){
+            LOG.info("Embauche d'un employé {} {} {} {} {}", nom, prenom, poste, niveauEtude, tempsPartiel);
+        }
+        else if(numeroMatricule >= 100000){
+            //LOG ERREUR
             throw new EmployeException("Limite des 100000 matricules atteinte !");
         }
         //On complète le numéro avec des 0 à gauche
@@ -51,6 +59,7 @@ public class EmployeService {
 
         //On vérifie l'existence d'un employé avec ce matricule
         if(employeRepository.findByMatricule(matricule) != null){
+            LOG.error("Limite des 100000 matricules atteintes");
             throw new EntityExistsException("L'employé de matricule " + matricule + " existe déjà en BDD");
         }
 
@@ -59,11 +68,14 @@ public class EmployeService {
         if(tempsPartiel != null){
             salaire = salaire * tempsPartiel;
         }
+        //LOG DEBUG salaire non arrondi
         salaire = Math.round(salaire*100d)/100d;
 
         //Création et sauvegarde en BDD de l'employé.
-        Employe employe = new Employe(nom, prenom, matricule, LocalDate.now(), salaire, Entreprise.PERFORMANCE_BASE, tempsPartiel);
+        //LOG INFO
 
+        Employe employe = new Employe(nom, prenom, matricule, LocalDate.now(), salaire, Entreprise.PERFORMANCE_BASE, tempsPartiel);
+        LOG.info("Sauvegarde de l'employé {}", employe);
         employeRepository.save(employe);
 
     }
